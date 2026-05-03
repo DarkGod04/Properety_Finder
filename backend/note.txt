@@ -1,0 +1,28 @@
+
+---- Django 
+https://www.djangoproject.com/download/
+pip install Django==5.2.4
+
+
+---- DRF  
+https://www.django-rest-framework.org/#installation
+pip install djangorestframework
+
+
+---- corsheaders
+https://pypi.org/project/django-cors-headers/
+pip install django-cors-headers
+
+
+--- phonenumbers
+https://pypi.org/project/django-phonenumber-field/
+pip install django-phonenumber-field
+
+
+https://pypi.org/project/django-phonenumbers/
+pip install django-phonenumbers
+
+
+--- Pillow
+https://pypi.org/project/pillow/
+pip install pillow

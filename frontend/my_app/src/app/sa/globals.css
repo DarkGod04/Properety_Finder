@@ -1,0 +1,114 @@
+/* src/app/globals.css */
+@import "tailwindcss";
+
+@tailwind/preflight;
+@tailwind utilities;
+
+:root {
+  --background: #F2F2F2;
+  --foreground: #171717;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary: #7c3aed;
+  --accent: #ea3934;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #F2F2F2;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out forwards;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+}
+input[type="file"]::before {
+  content: "Choose files";
+  display: inline-block;
+  background: #6366f1;
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Ensure proper contrast ratios for accessibility */
+.text-aa-contrast {
+  color: #1a1a1a;
+}
+
+.bg-aa-contrast {
+  background-color: #ffffff;
+}
+
