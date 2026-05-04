@@ -3,7 +3,7 @@
 
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import axiosInstance from "@/app/sa/lib/axios";
+import axiosInstance from "../lib/axios";
 
 const API_URL = "http://127.0.0.1:8000";
 

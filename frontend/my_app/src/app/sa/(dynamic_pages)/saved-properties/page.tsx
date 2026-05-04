@@ -3,7 +3,7 @@
 
 
 import { useEffect, useState } from "react";
-import axiosInstance from "@/app/sa/lib/axios";
+import axiosInstance from "../../lib/axios";
 import Loading from "../../components/loading/Loading";
 import PropertyCard from "../(properties_pages)/components/PropertyCard";
 import { useAuth } from "../../context/AuthContext";
