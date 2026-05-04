@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { updateRequestUserProfile } from "../../../utils/auth";
-import axiosInstance from "../../../lib/axios";
+import axiosInstance from "@/app/sa/lib/axios";
 
 // react-toastify
 import notify from "../../../common/useNotification"

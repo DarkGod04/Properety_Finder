@@ -10,7 +10,7 @@ import { PiBathtub } from "react-icons/pi";
 import { RxDimensions } from "react-icons/rx";
 import { FiPhone, FiMail, FiHeart, FiShare2, FiMoreVertical, FiFlag, FiMessageCircle } from "react-icons/fi";
 import { useAuth } from "../../../context/AuthContext";
-import axiosInstance from "../../../../sa/lib/axios";
+import axiosInstance from "@/app/sa/lib/axios";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
  

@@ -27,13 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
-# SECRET_KEY = 'django-insecure-x)2bgp+xrht7$i2-zb#!*siv8(c@yigqq)g(2g=njvdg)v8fic'
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-fallback-change-me-in-prod')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
 
 
@@ -63,8 +62,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     # https://pypi.org/project/django-cors-headers/
     'corsheaders',
-      
-    
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -156,10 +154,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 # STATIC
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # MEDIA
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-# MEDIA_ROOT = BASE_DIR / 'media'
+
+# AWS S3 Settings (if variables are provided)
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default=None)
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default=None)
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default=None)
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default=None)
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com' if AWS_STORAGE_BUCKET_NAME else None
+
+if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and AWS_STORAGE_BUCKET_NAME:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 
 
