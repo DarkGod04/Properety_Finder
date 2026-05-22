@@ -1,20 +1,77 @@
 import os
 import django
 import random
+import urllib.request
+import io
+from PIL import Image
 from decimal import Decimal
 from django.utils.text import slugify
+from django.core.files.base import ContentFile
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proj.settings')
 django.setup()
 
 from property.models import (
     Country, City, PropertyMainType, PropertySubTypes, 
-    PropertyPurpose, Amenity, Property
+    PropertyPurpose, Amenity, Property, PropertyImage
 )
 from users.models import CustomUser
 
 def seed_rich_data():
     print("Starting rich data seeding...")
+
+    # Caching helper for dummy images
+    def get_image_content(url, fallback_color=(100, 100, 150)):
+        try:
+            req = urllib.request.Request(
+                url, 
+                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+            )
+            with urllib.request.urlopen(req, timeout=10) as response:
+                return response.read()
+        except Exception as e:
+            print(f"Error downloading {url}: {e}. Generating fallback...")
+        
+        # Fallback using Pillow
+        img = Image.new('RGB', (800, 600), color=fallback_color)
+        img_byte_arr = io.BytesIO()
+        img.save(img_byte_arr, format='JPEG')
+        return img_byte_arr.getvalue()
+
+    # Premium Unsplash URLs
+    RESIDENTIAL_IMAGE_URLS = [
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
+    ]
+
+    COMMERCIAL_IMAGE_URLS = [
+        "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582037928769-181f2644ecb7?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80",
+    ]
+
+    print("Caching premium residential images in memory...")
+    residential_images = []
+    for i, url in enumerate(RESIDENTIAL_IMAGE_URLS):
+        color = (80 + i * 20, 100 + i * 15, 120 + i * 10)
+        bytes_data = get_image_content(url, fallback_color=color)
+        residential_images.append(bytes_data)
+
+    print("Caching premium commercial images in memory...")
+    commercial_images = []
+    for i, url in enumerate(COMMERCIAL_IMAGE_URLS):
+        color = (120 + i * 10, 80 + i * 20, 100 + i * 15)
+        bytes_data = get_image_content(url, fallback_color=color)
+        commercial_images.append(bytes_data)
 
     # Clear existing property data (keep countries, main types, purposes, amenities but recreate to ensure fresh ids if needed, or get existing)
     print("Cleaning existing property data...")
@@ -269,7 +326,17 @@ def seed_rich_data():
             random_amenities = random.sample(amenity_objs, random.randint(3, 6))
             prop.amenities.set(random_amenities)
 
-            print(f"Created Property: {prop.title} | {city_obj.city_name} | {currency} {prop.price}")
+            # Assign random images from the appropriate cached pool
+            images_pool = residential_images if maintype_slug == "residential" else commercial_images
+            num_images = random.randint(2, 3)
+            chosen_images = random.sample(images_pool, min(num_images, len(images_pool)))
+
+            for idx, img_bytes in enumerate(chosen_images):
+                filename = f"{prop.id}_{idx}.jpg"
+                prop_image = PropertyImage.objects.create(property=prop)
+                prop_image.images.save(filename, ContentFile(img_bytes), save=True)
+
+            print(f"Created Property: {prop.title} | {city_obj.city_name} | {currency} {prop.price} (with {len(chosen_images)} images)")
 
     print("Successfully seeded 60 high-quality properties!")
 
