@@ -36,6 +36,12 @@ const propertyDropdowns = {
 
 const Navbar: React.FC = () => {
   const { user, setUser } = useAuth();
+  const resolveProfilePicture = (path: any) => {
+    if (!path || path === "None" || typeof path !== "string") return "/profile_default.svg";
+    if (path.startsWith("http://") || path.startsWith("https://")) return path;
+    const base = (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+    return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+  };
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [activePropertyType, setActivePropertyType] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -312,7 +318,7 @@ const Navbar: React.FC = () => {
                   >
                     {user.profile_picture ? (
                       <Image
-                        src={`http://127.0.0.1:8000${user.profile_picture}`}
+                        src={resolveProfilePicture(user.profile_picture)}
                         alt="Profile"
                         width={36}
                         height={36}
@@ -523,7 +529,7 @@ const Navbar: React.FC = () => {
                   <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-lg">
                     {user.profile_picture ? (
                       <Image
-                        src={`http://127.0.0.1:8000${user.profile_picture}`}
+                        src={resolveProfilePicture(user.profile_picture)}
                         alt="Profile"
                         width={40}
                         height={40}

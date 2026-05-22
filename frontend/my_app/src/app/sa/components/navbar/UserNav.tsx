@@ -16,6 +16,12 @@ import { useAuth } from "../../context/AuthContext";
 const UserNav = ({user}) => {
     
     const { setUser } = useAuth();
+    const resolveProfilePicture = (path: any) => {
+        if (!path || path === "None" || typeof path !== "string") return "/profile_default.svg";
+        if (path.startsWith("http://") || path.startsWith("https://")) return path;
+        const base = (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+        return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+    };
     const router = useRouter();
     // const loginModal = useLoginModal();
     // const signupModal = useSignupModal();
@@ -74,7 +80,7 @@ const UserNav = ({user}) => {
                                <Image
                                     src={
                                     user 
-                                        ? `http://127.0.0.1:8000${user?.profile_picture}` 
+                                        ? resolveProfilePicture(user?.profile_picture)
                                         : "/profile_default.svg" // put a default image in /public
                                     }
                                     alt="Profile Picture"

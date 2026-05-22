@@ -56,8 +56,12 @@ export default function EditAdminProfile() {
             
             // set the preview picture as url string
             if (user.profile_picture) {
-              const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";       
-              setPreview(`${backendURL}${user.profile_picture}`);
+              if (user.profile_picture.startsWith('http://') || user.profile_picture.startsWith('https://')) {
+                setPreview(user.profile_picture);
+              } else {
+                const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";       
+                setPreview(`${backendURL}${user.profile_picture}`);
+              }
             } else {
               setPreview(null);
             }

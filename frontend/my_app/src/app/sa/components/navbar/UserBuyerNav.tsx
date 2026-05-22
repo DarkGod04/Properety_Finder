@@ -16,6 +16,12 @@ import { useAuth } from "../../context/AuthContext";
 const UserBuyerNav = ({user}) => {
     
     const {setUser , loading } = useAuth();
+    const resolveProfilePicture = (path: any) => {
+        if (!path || path === "None" || typeof path !== "string") return "/profile_default.svg";
+        if (path.startsWith("http://") || path.startsWith("https://")) return path;
+        const base = (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+        return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+    };
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -66,7 +72,7 @@ const UserBuyerNav = ({user}) => {
                 
                 { !loading && user && (
                     <Image
-                        src={`http://127.0.0.1:8000${user?.profile_picture}`}
+                        src={resolveProfilePicture(user?.profile_picture)}
                         alt="Buyer Profile"
                         width={40}
                         height={40}

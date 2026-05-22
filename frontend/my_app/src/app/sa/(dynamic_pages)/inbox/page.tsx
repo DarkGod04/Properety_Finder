@@ -22,6 +22,12 @@ type TabType = "received" | "sent" | "detail";
 export default function InboxPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const resolveProfilePicture = (path: any) => {
+    if (!path || path === "None" || typeof path !== "string") return "/profile_default.svg";
+    if (path.startsWith("http://") || path.startsWith("https://")) return path;
+    const base = (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+    return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+  };
 
   const [activeTab, setActiveTab] = useState<TabType>("received");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -253,7 +259,7 @@ export default function InboxPage() {
                               <div className="flex-shrink-0">
                                 {otherUser.profile_picture ? (
                                   <Image
-                                    src={`http://127.0.0.1:8000${otherUser.profile_picture}`}
+                                    src={resolveProfilePicture(otherUser.profile_picture)}
                                     alt={otherUser.first_name}
                                     width={48}
                                     height={48}
@@ -322,7 +328,7 @@ export default function InboxPage() {
                     <div className="flex items-start gap-4 mb-6">
                       {selectedMessage.sender.profile_picture ? (
                         <Image
-                          src={`http://127.0.0.1:8000${selectedMessage.sender.profile_picture}`}
+                          src={resolveProfilePicture(selectedMessage.sender.profile_picture)}
                           alt={selectedMessage.sender.first_name}
                           width={56}
                           height={56}
