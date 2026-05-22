@@ -9,7 +9,7 @@ environs==14.3.0
 marshmallow==4.0.1
 phonenumbers==9.0.13
 pillow==11.3.0
-psycopg2==2.9.10
+psycopg2-binary==2.9.10
 PyJWT==2.10.1
 python-dotenv==1.1.1
 sqlparse==0.5.3
@@ -19,3 +19,5 @@ django-storages==1.14.4
 boto3==1.36.1
 dj-database-url==2.1.0
 whitenoise==6.6.0
+cloudinary==1.41.0
+django-cloudinary-storage==0.3.0
