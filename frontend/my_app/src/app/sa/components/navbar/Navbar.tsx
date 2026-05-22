@@ -158,6 +158,7 @@ const Navbar: React.FC = () => {
               {/* Residential Dropdown */}
               <div className="relative group" onMouseEnter={() => togglePropertyType("residential")} onMouseLeave={() => setActivePropertyType(null)}>
                 <button
+                  suppressHydrationWarning
                   className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                     activePropertyType === "residential" || pathname.includes("residential")
                       ? "text-indigo-700 bg-indigo-50"
@@ -197,6 +198,7 @@ const Navbar: React.FC = () => {
               {/* Commercial Dropdown */}
               <div className="relative group" onMouseEnter={() => togglePropertyType("commercial")} onMouseLeave={() => setActivePropertyType(null)}>
                 <button
+                  suppressHydrationWarning
                   className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                     activePropertyType === "commercial" || pathname.includes("commercial")
                       ? "text-indigo-700 bg-indigo-50"
@@ -251,6 +253,7 @@ const Navbar: React.FC = () => {
               {/* More Dropdown */}
               <div className="relative">
                 <button
+                  suppressHydrationWarning
                   onClick={() => toggleMenu("more")}
                   className={`flex items-center gap-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                     activeMenu === "more"
@@ -310,6 +313,7 @@ const Navbar: React.FC = () => {
                 {/* User Menu */}
                 <div className="relative">
                   <button
+                    suppressHydrationWarning
                     onClick={() => toggleMenu("user_nav")}
                     className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 transition-colors"
                     aria-label="User menu"

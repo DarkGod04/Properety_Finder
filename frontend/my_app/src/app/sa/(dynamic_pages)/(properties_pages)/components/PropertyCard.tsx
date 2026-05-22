@@ -142,20 +142,17 @@ export default function PropertyCard({ property }: any) {
   // console.log('property.owner.profile.profile_picture=',property.owner.profile.profile_picture)
   // console.log('my image bakend url=',apiURL+property.owner.profile.profile_picture)
 
-
-
-
-
+  const handleCardClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("button") || target.closest("a")) {
+      return;
+    }
+    router.push(`/${countrySlug}/property/${property.id}`);
+  };
 
   return (
-    <Link href={`/${countrySlug}/property/${property.id}`}>
-        {/* <motion.div
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 200, damping: 15 }}
-          className="rounded-lg"
-        > */}
-        
-          <div className="flex flex-col rounded-t-lg border border-gray-300 sm:flex-row bg-white shadow-md transition-all overflow-hidden hover:bg-[#f3f4f6]">
+    <div onClick={handleCardClick} className="cursor-pointer">
+      <div className="flex flex-col rounded-t-lg border border-gray-300 sm:flex-row bg-white shadow-md transition-all overflow-hidden hover:bg-[#f3f4f6]">
               
               {/* Left Side: Image */}
               <div
@@ -287,11 +284,11 @@ export default function PropertyCard({ property }: any) {
               
               
               <div className="flex gap-2 text-lg items-center">
-                <button className="bg-white text-[#5842f6] text-center  border-1 border-[#5842f6] rounded-md flex items-center py-2 px-3"><FiPhone className="text-[#5842f6]"/><text className="ml-2 text-[#5842f6]">  Call</text></button>
-                <button className="bg-white text-[#5842f6] text-center  border-1 border-[#5842f6] rounded-md flex items-center py-2 px-3"><FiMail  className="text-[#5842f6]"/><text className="ml-2 text-[#5842f6]"> Email</text></button>
-                <button className="bg-white text-[#5842f6] text-center  border-1 border-[#5842f6] rounded-md flex items-center py-2 px-3"><FiMessageCircle className="text-[#5842f6]"/><text className="ml-2 text-[#5842f6]">Whatsapp</text></button>
+                <button className="bg-white text-[#5842f6] text-center  border-1 border-[#5842f6] rounded-md flex items-center py-2 px-3"><FiPhone className="text-[#5842f6]"/><span className="ml-2 text-[#5842f6]">  Call</span></button>
+                <button className="bg-white text-[#5842f6] text-center  border-1 border-[#5842f6] rounded-md flex items-center py-2 px-3"><FiMail  className="text-[#5842f6]"/><span className="ml-2 text-[#5842f6]"> Email</span></button>
+                <button className="bg-white text-[#5842f6] text-center  border-1 border-[#5842f6] rounded-md flex items-center py-2 px-3"><FiMessageCircle className="text-[#5842f6]"/><span className="ml-2 text-[#5842f6]">Whatsapp</span></button>
                 
-                <text className="text-gray-500 items-center">|</text>
+                <span className="text-gray-500 items-center">|</span>
 
                 {/* like button */}
                 {user && (
@@ -326,9 +323,6 @@ export default function PropertyCard({ property }: any) {
                 </div>
               </div>
           </div>
-            
-        {/* </motion.div> */}
-    
-   </Link>
+    </div>
   );
 }
