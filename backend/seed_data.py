@@ -17,17 +17,27 @@ from users.models import CustomUser
 def seed_data():
     print("Starting data seeding...")
 
+    # Clear existing data to ensure a clean slate
+    print("Cleaning database...")
+    Property.objects.all().delete()
+    City.objects.all().delete()
+    Country.objects.all().delete()
+    PropertySubTypes.objects.all().delete()
+    PropertyMainType.objects.all().delete()
+    PropertyPurpose.objects.all().delete()
+    Amenity.objects.all().delete()
+
     # 1. Countries
     countries_data = [
-        {"name": "Saudi Arabia", "code": "🇸🇦"},
-        {"name": "United Arab Emirates", "code": "🇦🇪"},
-        {"name": "Egypt", "code": "🇪🇬"},
+        {"name": "Saudi Arabia", "code": "🇸🇦", "slug": "sa"},
+        {"name": "United Arab Emirates", "code": "🇦🇪", "slug": "uae"},
+        {"name": "Egypt", "code": "🇪🇬", "slug": "eg"},
     ]
     countries = []
     for data in countries_data:
         country, created = Country.objects.get_or_create(
             code=data["code"],
-            defaults={"country_name": data["name"]}
+            defaults={"country_name": data["name"], "country_slug": data["slug"]}
         )
         countries.append(country)
         if created:
