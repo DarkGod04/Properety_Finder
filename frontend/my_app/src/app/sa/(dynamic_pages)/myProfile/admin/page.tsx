@@ -71,6 +71,13 @@ export default function MyAdminProfile() {
       }, [user, loading, router]); // Add dependencies here
 
     
+    const resolveProfilePicture = (path: any) => {
+        if (!path || path === "None" || typeof path !== "string") return "/profile_default.svg";
+        if (path.startsWith("http://") || path.startsWith("https://")) return path;
+        const base = (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+        return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+    };
+
     if (loading) {
        return <p className="text-center mt-20">Loading...</p>; // spinner/loader
     }
@@ -107,11 +114,7 @@ export default function MyAdminProfile() {
                           
                           <div className="text-center justify-items-center">
                             <Image
-                              src={
-                                ppicture 
-                                  ? `http://127.0.0.1:8000${ppicture}` 
-                                  : "/profile_default.svg" // put a default image in /public
-                              }
+                              src={resolveProfilePicture(ppicture)}
                               alt="Admin Profile Picture"
                               width={300}
                               height={300}

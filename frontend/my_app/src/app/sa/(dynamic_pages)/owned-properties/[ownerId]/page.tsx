@@ -1,5 +1,7 @@
 // src/app/sa/(dynamic_pages)/owned-properities/page.tsx
 "use client";
+// src/app/sa/(dynamic_pages)/owned-properities/page.tsx
+"use client";
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -10,6 +12,7 @@ import PropertyCard from "../../(properties_pages)/components/PropertyCard";
 import Loading from "../../../components/loading/Loading";
 import Footer from "../../../components/footer/Footer";
 import { Phone, Mail, MessageCircle, ExternalLink } from "lucide-react";
+import { resolveMediaUrl } from "../../../utils/property";
 
 
 
@@ -95,7 +98,7 @@ export default function OwnerPropertiesPage() {
             <div className="flex items-center">
                 {ownerData.profile?.profile_picture && (
                               <Image
-                                src={`${apiUrl}${ownerData.profile.profile_picture}`}
+                                src={resolveMediaUrl(ownerData.profile.profile_picture)}
                                 alt="Agent photo"
                                 width={150}
                                 height={150}

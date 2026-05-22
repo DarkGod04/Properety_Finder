@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 import { useAuth } from '../../context/AuthContext';
 import axios from "axios";
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
 
 export default function LoginPage() {

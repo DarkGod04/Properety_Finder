@@ -1,7 +1,7 @@
 // src/app/utils/property.js
 import axiosInstance from "../lib/axios";
 import axios from "axios";
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 import { useAuth, } from "../context/AuthContext";
 
 
@@ -430,4 +430,14 @@ export const uploadPropertyImages = async (propertyId:string, formData:FormData)
         throw { error: "Something went wrong." };
         }
     }
+}
+
+export function resolveMediaUrl(
+  path: string | null | undefined,
+  fallback = "/profile_default.svg"
+): string {
+  if (!path || typeof path !== "string") return fallback;
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+  const base = API_URL.replace(/\/$/, "");
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }

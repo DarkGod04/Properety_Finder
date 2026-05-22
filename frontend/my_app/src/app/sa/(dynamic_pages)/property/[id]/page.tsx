@@ -10,7 +10,8 @@ import PropertyHeader from "../components/PropertyHeader";
 import PropertyDetails from "../components/PropertyDetails";
 import { useParams } from "next/navigation";
 import Loading from "../../../components/loading/Loading";
-import Footer from "../../../components/footer/Footer"
+import Footer from "../../../components/footer/Footer";
+import { resolveMediaUrl } from "../../../utils/property";
 
 
 
@@ -44,11 +45,10 @@ export default function PropertyPage() {
                 );
 
 
-                const apiURL = process.env.NEXT_PUBLIC_API_URL;      // e.g., http://127.0.0.1:8000
                 // 🔥 Transform images to match frontend type
                 const transformedImages = res.data.images?.map((img: any) => ({
                     id: img.id,
-                    url: `${apiURL}${img.images}`,  // prepend backend URL    // backend gives "images" => make it "url"
+                    url: resolveMediaUrl(img.images),  // prepend backend URL if relative, else use as-is
                     alt: property?.title || "property image"
                 })) || [];
 

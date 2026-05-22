@@ -47,7 +47,8 @@ export default function SetNewPassword() {
         console.log('password2=', password2);
 
         
-        try { await axios.patch("http://127.0.0.1:8000/users/set-new-password/", 
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+        try { await axios.patch(`${API_URL}/users/set-new-password/`, 
               {
                 uidb64: uid,
                 token: token,

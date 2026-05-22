@@ -20,6 +20,13 @@ export default function MyBuyerProfile() {
     
     const router = useRouter();
     
+    const resolveProfilePicture = (path: any) => {
+        if (!path || path === "None" || typeof path !== "string") return "/profile_default.svg";
+        if (path.startsWith("http://") || path.startsWith("https://")) return path;
+        const base = (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+        return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+    };
+    
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [role, setRole] = useState('');  
@@ -105,11 +112,7 @@ export default function MyBuyerProfile() {
                           
                           <div className="text-center justify-items-center">
                             <Image
-                              src={
-                                ppicture 
-                                  ? `http://127.0.0.1:8000${ppicture}` 
-                                  : "/profile_default.svg"               // put a default image in /public
-                              }
+                              src={resolveProfilePicture(ppicture)}
                               alt="Buyer Profile Picture"
                               width={300}
                               height={300}

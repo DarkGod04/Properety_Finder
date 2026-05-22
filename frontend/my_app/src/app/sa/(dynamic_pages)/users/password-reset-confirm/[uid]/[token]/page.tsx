@@ -29,8 +29,9 @@ export default function PasswordResetConfirm() {
     
         useEffect(() => {
             if (uid && token) {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
             axios
-                .get(`http://127.0.0.1:8000/users/password-reset-confirm/${uid}/${token}/`)
+                .get(`${API_URL}/users/password-reset-confirm/${uid}/${token}/`)
                 
                 .then(() => {
                     setMessage('✅ Link valid. Redirecting to set a new password...');

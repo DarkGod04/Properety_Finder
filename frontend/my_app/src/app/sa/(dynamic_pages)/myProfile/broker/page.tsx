@@ -20,6 +20,13 @@ export default function MyBrokerProfile() {
     const { user, loading } = useAuth();
     const router = useRouter();
     const [userProfile, setUserProfile] = useState<typeof user>(null);
+
+    const resolveProfilePicture = (path: any) => {
+        if (!path || path === "None" || typeof path !== "string") return "/profile_default.svg";
+        if (path.startsWith("http://") || path.startsWith("https://")) return path;
+        const base = (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+        return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+    };
     
 
     useEffect(() => {
@@ -76,11 +83,7 @@ export default function MyBrokerProfile() {
                           {/* profile image */}
                           <div className="text-center justify-items-center">
                             <Image
-                              src={
-                                  userProfile.profile_picture
-                                    ? `http://127.0.0.1:8000${userProfile.profile_picture}` 
-                                    : "/profile_default.svg" // put a default image in /public
-                              }
+                              src={resolveProfilePicture(userProfile.profile_picture)}
                               alt="Broker Profile Picture"
                               width={300}
                               height={300}

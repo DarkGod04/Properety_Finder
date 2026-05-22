@@ -34,8 +34,9 @@ export default function ConfirmEmailPage() {
       // data inserted in fields
       console.log('uid=', uid);
       console.log('token=', token);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
       axios
-        .get(`http://127.0.0.1:8000/users/confirm-email/${uid}/${token}/`)
+        .get(`${API_URL}/users/confirm-email/${uid}/${token}/`)
         .then(() => {
             setMessage('Your email has been confirmed successfully! You can now log in.✅');
             notify("Your email has been confirmed successfully!", "success");

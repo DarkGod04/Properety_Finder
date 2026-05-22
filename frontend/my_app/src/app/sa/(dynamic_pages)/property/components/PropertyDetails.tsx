@@ -17,15 +17,13 @@ import Image from "next/image";
 import { GoArrowRight } from "react-icons/go";
 import Link from "next/link";
 import { GrLocation } from "react-icons/gr";
+import { resolveMediaUrl } from "../../../utils/property";
 
 
 
 export default function PropertyDetails({ property }: { property: Property }) {
     
-    const apiURL = process.env.NEXT_PUBLIC_API_URL;
-    const imageURL = property.owner?.profile?.profile_picture 
-    ?`${apiURL}${property.owner?.profile?.profile_picture}`.replace(/\/+/, "/")
-    : null;
+    const imageURL = resolveMediaUrl(property.owner?.profile?.profile_picture);
     console.log("PropertyDetails-imageURL=",property.owner?.profile?.profile_picture) 
     
     

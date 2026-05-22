@@ -6,16 +6,14 @@ import { PiBathtub } from "react-icons/pi";
 import { RxDimensions } from "react-icons/rx";
 import { Phone, Mail, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import { resolveMediaUrl } from "../../../utils/property";
 
 
 
 export default function PropertyHeader({ property }: { property: Property }) {
   
     console.log("PropertyHeader-property=",property)
-    const apiURL = process.env.NEXT_PUBLIC_API_URL;
-    const imageURL = property.owner?.profile?.profile_picture 
-    ? `${apiURL}${property.owner?.profile?.profile_picture}`.replace(/\/+/, "/")
-    : null;
+    const imageURL = resolveMediaUrl(property.owner?.profile?.profile_picture);
     console.log("PropertyHeader-imageURL=",property.owner?.profile?.profile_picture)
 
   return (
