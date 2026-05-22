@@ -143,7 +143,6 @@ class ListSubTypesByMaintypeAPIView(APIView):
     serializer_class = PropertySubTypesMainTypeSerializer
     
     def get(self, request, main_type_id, *args, **kwargs):
-        print("kwargs=",kwargs)
         try:
             mainType = get_object_or_404(PropertyMainType, id=main_type_id)
             # print('mainType =', mainType)
@@ -168,13 +167,9 @@ class ListSubTypesByCountryMaintypePurposeAPIView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, country_slug, maintype_slug, purpose_slug, *args, **kwargs):
-        print('country_slug =', country_slug)
-        print('maintype_slug =', maintype_slug)
-        print('purpose_slug =', purpose_slug)
         try:
             mainType = get_object_or_404(PropertyMainType, maintype_slug=maintype_slug)
             subTypes = PropertySubTypes.objects.filter(main_type=mainType.id)
-            print('mainType-subTypes =', subTypes)
 
             serializer = PropertySubTypesSerializer(
                 subTypes,
@@ -185,7 +180,6 @@ class ListSubTypesByCountryMaintypePurposeAPIView(APIView):
                     'purpose_slug': purpose_slug,
                 }
             )
-            print("Passing context:", serializer.context)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except PropertyMainType.DoesNotExist:
@@ -201,15 +195,12 @@ class SearchListSubTypesByCountryMaintypeAPIView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, *args, **kwargs):
-        print("SubTypes-query_params=",request.query_params)
-        
         # SubTypes
         queryset = PropertySubTypes.objects.all()
         type = request.query_params.get("type")  
         if type:
             type = slugify(type.lower())
             queryset = queryset.filter(main_type__maintype_slug=type)
-            print("SubTypes-queryset=",queryset)
             
         serializer = PropertySubTypesSerializer(
             queryset,
@@ -328,9 +319,7 @@ class CreatePropertyDataAPIView(APIView): # only property data no images  --step
     permission_classes = [IsAuthenticated, IsAllowedToAddProperty]  # 👈 both required
     
     def post(self, request):
-        print('CreatePropertyDataAPIView-request.data=',request.data) 
         serializer = self.serializer_class(data=request.data)
-        print('serializer.initial_data=',serializer.initial_data)
         
         if serializer.is_valid():
             serializer.save(owner=self.request.user)
@@ -419,8 +408,6 @@ class ListPropertyByParamsFilteringAPIView(APIView):
     def get(self, request, country_slug, *args, **kwargs):
         country = get_object_or_404(Country, country_slug=country_slug)
         queryset = Property.objects.filter(country=country, is_published=True)
-        print("without filter-queryset=",queryset)
-        print("query_params=",request.query_params)
         
         # from searchParams -- come from filtering by buyer in frontend 
         city_name = request.query_params.get("selectedCity")
@@ -435,48 +422,39 @@ class ListPropertyByParamsFilteringAPIView(APIView):
         selectedMinArea = request.query_params.get("selectedMinArea")
         selectedMaxArea= request.query_params.get("selectedMaxArea")
         amenitiesList = request.query_params.getlist("amenities")  # use getlist  insteade of get
-        print("amenitiesList =", amenitiesList)   # ['Waters', 'Electricity', 'pool']
         
         # filtering  -- search
         if city_name:
             city_name = slugify(city_name.lower())
             queryset = queryset.filter(city__city_slug=city_name)
-            print("queryset-city_name", queryset)
         
         if pmain_type:
             pmain_type = slugify(pmain_type.lower())
             queryset = queryset.filter(pmain_type__maintype_slug=pmain_type)
-            print("queryset-pmain_type", queryset)
         
         if purpose:
             purpose = slugify(purpose.lower())
             queryset = queryset.filter(purpose__purpose_slug=purpose)
-            print("queryset-purpose", queryset)
         
         if psub_type:
             psub_type = slugify(psub_type.lower())
             queryset = queryset.filter(psub_type__subtype_name=psub_type)
-            print("queryset-psub_type", queryset)
             
         if bedrooms :
             queryset = queryset.filter(bedrooms=bedrooms)
-            print("queryset-bedrooms", queryset)
         
         if bathrooms:
             queryset = queryset.filter(bathrooms=bathrooms)
-            print("queryset-bathrooms", queryset)
         if fur:
             queryset = queryset.filter(furnishing=fur)
-            print("queryset-fur", queryset)
         
         if selectedMinPrice and selectedMaxPrice:
             try:
                 min_price = float(selectedMinPrice)
                 max_price = float(selectedMaxPrice)
                 queryset = queryset.filter(price__range=[min_price, max_price])
-                print("queryset-Price", queryset)
             except ValueError:
-                print("Invalid price values:", selectedMinPrice, selectedMaxPrice)
+                pass
                 
         
         if selectedMinArea and selectedMaxArea:
@@ -484,16 +462,12 @@ class ListPropertyByParamsFilteringAPIView(APIView):
                 min_area = float(selectedMinArea)
                 max_area = float(selectedMaxArea)
                 queryset = queryset.filter(property_size__range=[min_area, max_area])
-                print("queryset-Area", queryset)
             except ValueError:
-                print("Invalid area values:", selectedMinArea, selectedMaxArea)
+                pass
         
         if amenitiesList:
             queryset = queryset.filter(amenities__amenity_name__in=amenitiesList).distinct()
-            print("queryset-amenities", queryset)
                 
-        print("Final queryset=",queryset)
-        
         
         
         #  ordering -- sort 
@@ -586,9 +560,7 @@ class OwnerPropertiesAPIView(APIView):
 
     def get(self, request, country_slug, owner_id, *args, **kwargs):
         country = get_object_or_404(Country, country_slug=country_slug)
-        print("country=",country)
         owner = get_object_or_404(CustomUser, id=owner_id)
-        print("owner=",owner)
         queryset = Property.objects.filter(country=country, owner= owner, is_published=True)
         serializer = PropertySerializer(queryset, many=True, context={'request': request})
 
@@ -611,7 +583,6 @@ class PropertyDetailsAPIView(APIView):
     permission_classes = [permissions.AllowAny]
     
     def get(self, request, id, *args, **kwargs):
-        print("kwargs=",kwargs)
         try:
             property = get_object_or_404(Property, id=id)
             # print('property =', property)
