@@ -118,10 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     
     
       return (
-
-      <html lang="en">
-        <body className={poetsenOne.className}>
-
+        <div className={poetsenOne.className}>
           <AuthProvider>
               {!hideNavbar && <Navbar />}
               <div>
@@ -131,8 +128,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </main>
               </div>
           </AuthProvider>
-        
-        </body>
-      </html>
-    );
+        </div>
+      );
 }
