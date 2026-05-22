@@ -10,7 +10,7 @@ import { PiBathtub } from "react-icons/pi";
 import { RxDimensions } from "react-icons/rx";
 import { FiPhone, FiMail, FiHeart, FiShare2, FiMoreVertical, FiFlag, FiMessageCircle } from "react-icons/fi";
 import { useAuth } from "../../../context/AuthContext";
-import axiosInstance from "../../../../lib/axios";
+import axiosInstance from "../../../lib/axios";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
  
@@ -20,7 +20,7 @@ import { formatDistanceToNow } from "date-fns";
 
 
 
-const PLACEHOLDER_IMAGE = "/profile_default.svg";
+const PLACEHOLDER_IMAGE = "/property_placeholder.png";
 
 function resolveCardImageUrls(images: unknown, apiBase: string | undefined): string[] {
   const list = Array.isArray(images) ? images : [];

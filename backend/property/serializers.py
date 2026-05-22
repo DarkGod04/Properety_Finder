@@ -170,6 +170,11 @@ class PropertySubTypesMainTypeSerializer(serializers.ModelSerializer):
 
 
 
+class SimplePropertySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Property
+        fields = ['id']
+
 #  <slug:country_slug>/<slug:maintype_slug>/<slug:purpose_slug>/subtypes/
 # PropertySubTypes ##################################################################
 class PropertySubTypesSerializer(serializers.ModelSerializer):
@@ -194,17 +199,10 @@ class PropertySubTypesSerializer(serializers.ModelSerializer):
 
 
     def get_properties(self, obj):
-        from .serializers import PropertySerializer  # now you can import PropertySerializer inside method
-        context = self.context
-        print("PropertySubTypesSerializer-context=",context)
         country_slug = self.context.get('country_slug')
-        print("PropertySubTypesSerializer-country_slug=",country_slug)
         purpose_slug = self.context.get('purpose_slug')
-        print("PropertySubTypesSerializer-purpose_slug=",purpose_slug)
-         
-        
-        queryset = obj.properties.filter(is_published=True,country__country_slug=country_slug,  purpose__purpose_slug=purpose_slug)
-        return PropertySerializer(queryset, many=True,context={'request': self.context.get('request')} ).data
+        queryset = obj.properties.filter(is_published=True, country__country_slug=country_slug, purpose__purpose_slug=purpose_slug)
+        return SimplePropertySerializer(queryset, many=True).data
             
           
             
@@ -238,23 +236,14 @@ class SerarchPropertySubTypesSerializer(serializers.ModelSerializer):
 
 
     def get_properties(self, obj):
-        from .serializers import PropertySerializer  # now you can import PropertySerializer inside method
         country_slug = self.context.get('country_slug')
         purpose_slug = self.context.get('purpose_slug')
-        print("Serarchserializer-purpose_slug=",purpose_slug)
-         
-        context = self.context
-        print("Serarchserializer-context=",context)
         queryset = obj.properties.filter(
             is_published=True,
             country__country_slug=country_slug,
             purpose__purpose_slug=purpose_slug
         )
-        return PropertySerializer(
-            queryset,
-            many=True,
-            context={'request': self.context.get('request')}
-        ).data
+        return SimplePropertySerializer(queryset, many=True).data
             
     
         # filters = self.context.get('filters', {})

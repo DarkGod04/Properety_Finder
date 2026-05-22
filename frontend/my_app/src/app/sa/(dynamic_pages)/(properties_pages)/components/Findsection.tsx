@@ -375,11 +375,11 @@ const containerRef = useRef<HTMLDivElement>(null);
 
 
   return (
-    <section className="p-2 bg-red-600">
+    <section className="p-2">
         {/* Main div container */}
         <div
           ref={containerRef}
-          className="flex flex-wrap items-center gap-2 w-full bg-white justify-start md:justify-between p-2 rounded-lg"
+          className="flex flex-wrap items-center gap-2 w-full bg-white justify-start lg:flex-nowrap p-2 rounded-lg"
         >
                 {/* Search input */}
                 {/* <div className="">
@@ -410,7 +410,7 @@ const containerRef = useRef<HTMLDivElement>(null);
                   </button>
 
                   {activeMenu === "cityMenu" && (
-                    <div className="absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-32 sm:w-40 p-2">
+                    <div className="absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-32 sm:w-40 p-2 text-gray-800">
                       {cityList.map(
                         (option) => (
                           <label
@@ -449,7 +449,7 @@ const containerRef = useRef<HTMLDivElement>(null);
                   </button>
 
                   {activeMenu === "maintypePurposeMenu" && (
-                    <div className="absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-52 p-2">
+                    <div className="absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-52 p-2 text-gray-800">
                       {["Buy residential", "Rent residential", "Buy commercial", "Rent commercial"].map(
                         (option) => (
                           <label
@@ -488,7 +488,7 @@ const containerRef = useRef<HTMLDivElement>(null);
                   </button>
 
                   {activeMenu === "subtypeMenu" && (
-                    <div className="absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-32 p-2">
+                    <div className="absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-32 p-2 text-gray-800">
                       {subtypesList.map(
                         (option) => (
                           <label
@@ -522,7 +522,7 @@ const containerRef = useRef<HTMLDivElement>(null);
                     aria-expanded={activeMenu === "bedsBathsMenu"}
                     className="cursor-pointer flex items-center px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg focus:outline-none border border-gray-300"
                   >
-                    {studio},{beds}Beds, {baths}Baths
+                    {studio ? "Studio" : (beds || baths ? `${beds ? beds + " Beds" : ""}${beds && baths ? ", " : ""}${baths ? baths + " Baths" : ""}` : "Beds, Baths")}
                     <FiChevronDown
                       className={`ml-1 transition-transform duration-300 ${
                         activeMenu === "bedsBathsMenu" ? "rotate-180" : ""
@@ -531,7 +531,7 @@ const containerRef = useRef<HTMLDivElement>(null);
                   </button>
 
                   {activeMenu === "bedsBathsMenu" && (
-                    <div className="absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-[450px] h-[250px] p-2">
+                    <div className="absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-[450px] h-[250px] p-2 text-gray-800">
                       Bedrooms
                       <div className="flex p-2 mb-6">
                       {["studio"].map(
@@ -624,7 +624,7 @@ const containerRef = useRef<HTMLDivElement>(null);
                     </button>
 
                     {activeMenu === "priceMenu" && (
-                    <div className="flex absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-[380px] h-[100px]  p-2">
+                    <div className="flex absolute z-50 left-0 top-full bg-gray-100 border rounded-lg shadow-md w-[380px] h-[100px]  p-2 text-gray-800">
                     
                               {/* Select a min price - max price from a prices list */}
                               <div className="md:w-full flex justify-between">
@@ -707,7 +707,7 @@ const containerRef = useRef<HTMLDivElement>(null);
 
                             {/* Modal  */}
                             <div className="relative cursor-pointer pointer-events-none transition my-auto p-4 w-[800px] mx-auto">
-                                <div className="w-full py-2 bg-white cursor-default pointer-events-auto  relative rounded-xl">
+                                <div className="w-full py-2 bg-white cursor-default pointer-events-auto  relative rounded-xl text-gray-800">
                                     {/*  close button */}
                                     <button 
                                             onClick={() => toggleMenu("moreMenu")}
@@ -865,7 +865,7 @@ const containerRef = useRef<HTMLDivElement>(null);
                 {/* Find button */}
                 <button
                   onClick={handleSearch}
-                  className="cursor-pointer px-4 py-3  bg-[#ea3934] text-white font-semibold hover:bg-[#97211e] transition"
+                  className="cursor-pointer px-6 py-3 rounded-lg bg-[#ea3934] text-white font-semibold hover:bg-[#97211e] transition"
                 >
                   Find
                 </button>

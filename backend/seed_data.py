@@ -19,9 +19,9 @@ def seed_data():
 
     # 1. Countries
     countries_data = [
-        {"name": "Saudi Arabia", "code": "SA"},
-        {"name": "United Arab Emirates", "code": "AE"},
-        {"name": "Egypt", "code": "EG"},
+        {"name": "Saudi Arabia", "code": "🇸🇦"},
+        {"name": "United Arab Emirates", "code": "🇦🇪"},
+        {"name": "Egypt", "code": "🇪🇬"},
     ]
     countries = []
     for data in countries_data:
@@ -104,8 +104,10 @@ def seed_data():
     # 7. Properties
     admin_user = CustomUser.objects.filter(role='admin').first()
     if not admin_user:
-        print("Error: Admin user not found. Run the admin creation command first.")
-        return
+        admin_user = CustomUser.objects.create_superuser('admin@example.com', 'adminpass123')
+        admin_user.role = 'admin'
+        admin_user.save()
+        print("Created admin user.")
 
     titles = [
         "Luxury Villa with Private Pool",

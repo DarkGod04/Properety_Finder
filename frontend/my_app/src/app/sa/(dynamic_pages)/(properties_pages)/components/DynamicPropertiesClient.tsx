@@ -75,7 +75,7 @@ export default function DynamicPropertiesClient({ maintypeSlug, purposeSlug }) {
     // 🚫 No Data
     if (properties.length === 0)
         return (
-            <main className="min-h-screen bg-gray-50">
+            <main className="min-h-screen bg-gray-50 text-gray-800">
                 <section className="max-w-6xl mx-auto px-4">
                     <Findsection 
                         mainType={maintypeSlug} 
@@ -94,7 +94,7 @@ export default function DynamicPropertiesClient({ maintypeSlug, purposeSlug }) {
 
     // ✅ Success
     return (
-            <main className="min-h-screen bg-white">
+            <main className="min-h-screen bg-white text-gray-800">
                 <section className="max-w-6xl mx-auto px-4">
                     
                     

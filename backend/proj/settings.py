@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from datetime import timedelta
 import os
 from pathlib import Path
+import dj_database_url
 # https://pypi.org/project/environs/#install
 from environs import env  
 
@@ -67,6 +68,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # https://pypi.org/project/django-cors-headers/
     'corsheaders.middleware.CorsMiddleware',    #'corsheaders',
@@ -104,14 +106,11 @@ WSGI_APPLICATION = 'proj.wsgi.application'
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('POSTGRES_DB', default='myproject_db'),
-        'USER': env('POSTGRES_USER', default='postgres'),
-        'PASSWORD': env('POSTGRES_PASSWORD', default='Nikhil@123'),
-        'HOST': env('POSTGRES_HOST', default='localhost'),
-        'PORT': env('POSTGRES_PORT', default='5432'),
-    }
+    'default': dj_database_url.config(
+        default=f"postgres://{env('POSTGRES_USER', default='postgres')}:{env('POSTGRES_PASSWORD', default='Nikhil@123')}@{env('POSTGRES_HOST', default='localhost')}:{env('POSTGRES_PORT', default='5432')}/{env('POSTGRES_DB', default='myproject_db')}",
+        conn_max_age=600,
+        ssl_require=not DEBUG
+    )
 }
 
 
@@ -171,6 +170,9 @@ if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and AWS_STORAGE_BUCKET_NAME:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+else:
+    # Use Whitenoise for local/free-tier hosting static serving
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
@@ -233,16 +235,16 @@ CORS_ALLOW_CREDENTIALS = True  # Enable cookie/session support across domains
 
 
 # Required if using cookies  // Django settings should allow cookies from localhost:3000
-CSRF_TRUSTED_ORIGINS = [
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:3001",
     "http://127.0.0.1:3001",
     "http://localhost:3002",
     "http://127.0.0.1:3002",
-]
+])
 
-FRONTEND_DOMAIN = "localhost:3002"  # or your actual frontend domain
+FRONTEND_DOMAIN = env('FRONTEND_DOMAIN', default="localhost:3002")
 
 
 # If using SessionAuthentication or JWT in cookie:

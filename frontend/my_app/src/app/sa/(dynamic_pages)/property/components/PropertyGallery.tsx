@@ -10,8 +10,18 @@ export default function PropertyGallery({ images }: { images: ImageObj[] }) {
 
   if (!images || images.length === 0)
     return (
-      <div className="h-64 bg-gray-100 flex items-center justify-center">
-        No images
+      <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden shadow mb-6">
+        <Image
+          src="/property_placeholder.png"
+          alt="No images available"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+          <span className="bg-black/60 text-white rounded-full px-4 py-2 text-sm backdrop-blur-sm">
+            No Images Available
+          </span>
+        </div>
       </div>
     );
 
