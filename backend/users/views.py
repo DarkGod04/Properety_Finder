@@ -183,19 +183,20 @@ class LoginAPIView(views.APIView):
                 "user": CustomUserSerializer(user).data
             }, status=status.HTTP_200_OK)
 
+            is_production = not settings.DEBUG
             response.set_cookie(
                 key="access_token", 
                 value=access_token,
                 httponly=True,
-                secure=False,      # False for local HTTP dev; set True in production (HTTPS)
-                samesite="Lax",    # Lax works on HTTP localhost; use None only for HTTPS cross-site
+                secure=is_production,
+                samesite="None" if is_production else "Lax",
             )
             response.set_cookie(
                 key="refresh_token",
                 value=str(refresh),
                 httponly=True,
-                secure=False,      # False for local HTTP dev
-                samesite="Lax",
+                secure=is_production,
+                samesite="None" if is_production else "Lax",
             )
             return response
 
@@ -223,12 +224,13 @@ class CookieCustomTokenRefreshView(TokenRefreshView):
             response = Response({"message": "Access token refreshed successfully"},
                                 status=status.HTTP_200_OK
             )
+            is_production = not settings.DEBUG
             response.set_cookie(
                 key="access_token",
                 value=access_token,
                 httponly=True,
-                secure=False,      # False for local HTTP dev
-                samesite="Lax",
+                secure=is_production,
+                samesite="None" if is_production else "Lax",
             )
             return response
 

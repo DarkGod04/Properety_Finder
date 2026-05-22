@@ -26,8 +26,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project
 COPY . /app/
 
+# Make start.sh executable
+RUN chmod +x /app/start.sh
+
 # Expose port
 EXPOSE 8000
 
-# Run gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "proj.wsgi:application"]
+# Run the startup script
+CMD ["/app/start.sh"]
